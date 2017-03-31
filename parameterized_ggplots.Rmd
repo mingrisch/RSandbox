@@ -2,13 +2,16 @@
 title: "Parameterized ggplots"
 author: "Michael Ingrisch"
 date: "March 31, 2017"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
+## Problem
 
 I was always wondering how exactly ggplot resolves the column names that you provide e.g. in aesthetic mappings.
 This became a problem in the moment in which I wanted to wrap a ggplot call into a function, in order to quickly plot several columns of a complex dataset. Here, I reproduce this issue in a simple example.
 We are working in the tidyverse and use the built-in mpg dataframe to keep things simple:
-```{r setup}
+```{r setup, echo=T, message = F, warning = F}
 library(tidyverse)
 head(mpg)
 
@@ -38,6 +41,7 @@ This error makes sense, since `cty`is not known when our function is called. Of 
 plot.data.param(mpg, 'cty')
 ```
 
+## The solution: aes_string
 
 Therefore, we need to find a way to pass a string variable to the ggplot aesthetics. The solution is provided by aes_string:
 
@@ -51,5 +55,6 @@ plot.data.aes.string <- function(data, param){
 plot.data.aes.string(mpg, 'hwy')
 plot.data.aes.string(mpg, 'cty')
 ```
+Problem solved.
 
 
